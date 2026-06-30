@@ -97,3 +97,8 @@
   font-size: 28px;
 }
 .checkout-success p { color: var(--gray-mid); max-width: 420px; margin-bottom: 10px; }
+
+@media (max-width: 560px) {
+  .field-grid { grid-template-columns: 1fr; }
+  .checkout-fieldset { padding: 18px; }
+}
