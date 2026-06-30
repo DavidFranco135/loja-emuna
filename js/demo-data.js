@@ -428,4 +428,10 @@ export const demoSettings = {
   email: "contato@emuna.com.br",
   phone: "(21) 99999-9999",
   address: "Niterói, RJ — Brasil",
+  aboutEyebrow: "Nossa história",
+  aboutTitle: "Cada ponto carrega uma intenção",
+  aboutText:
+    "A Emuná nasceu da vontade de transformar fé, cuidado e delicadeza em peças que se possa tocar. Cada item em crochê é feito ponto a ponto, cada bijuteria é escolhida com carinho, e cada caneca da Escola de Cura carrega uma mensagem para o seu dia.\nAcreditamos que um produto bem-feito é também um gesto de afeto — para quem compra e para quem recebe de presente.",
+  aboutImage:
+    "https://images.unsplash.com/photo-1556760544-74068565f05c?q=80&w=900&auto=format&fit=crop",
 };
