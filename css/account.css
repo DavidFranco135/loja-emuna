@@ -102,6 +102,13 @@
 .order-card__header strong { color: var(--violet-deep); }
 .order-card__items { font-size: 13px; color: var(--gray-mid); }
 
+@media (max-width: 480px) {
+  .field-grid { grid-template-columns: 1fr; }
+  .auth-card { padding: 24px 20px; }
+  .account-tabs { gap: 0; }
+  .account-tab { padding: 10px 10px; font-size: 13px; }
+}
+
 .acc-badge {
   display: inline-block;
   padding: 3px 10px;
