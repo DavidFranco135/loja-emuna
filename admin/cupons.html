@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Cupons — Painel Emuná</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+<div class="admin-shell">
+  <div id="sidebar-placeholder"></div>
+
+  <main class="admin-main">
+    <div class="panel">
+      <div class="panel__header">
+        <h2>Cupons de desconto</h2>
+        <button class="btn btn--primary" id="new-coupon-btn">+ Novo cupom</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Código</th><th>Tipo</th><th>Valor</th><th>Descrição</th><th></th></tr></thead>
+          <tbody id="coupons-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="admin-modal-backdrop" id="coupon-backdrop"></div>
+<div class="admin-slideover" id="coupon-slideover" aria-hidden="true" style="width:min(420px,94vw)">
+  <div class="admin-slideover__header">
+    <h2 id="coupon-form-title">Novo cupom</h2>
+    <button class="admin-slideover__close" id="coupon-form-close" aria-label="Fechar">×</button>
+  </div>
+  <form id="coupon-form">
+    <input type="hidden" id="cpf-id" />
+    <div class="form-grid">
+      <label class="field field--wide">Código
+        <input type="text" id="cpf-code" required placeholder="ex: EMUNA10" style="text-transform:uppercase" />
+      </label>
+      <label class="field">Tipo
+        <select id="cpf-type">
+          <option value="percent">Desconto percentual</option>
+          <option value="shipping">Frete grátis</option>
+        </select>
+      </label>
+      <label class="field" id="cpf-value-wrap">Valor (%)
+        <input type="number" id="cpf-value" min="0" max="100" />
+      </label>
+      <label class="field field--wide">Descrição (exibida ao aplicar)
+        <input type="text" id="cpf-label" placeholder="ex: 10% de desconto" />
+      </label>
+    </div>
+    <div class="admin-slideover__footer">
+      <button type="submit" class="btn btn--primary">Salvar cupom</button>
+      <button type="button" class="btn btn--ghost" id="coupon-form-cancel">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+<script type="module" src="js/admin-coupons.js"></script>
+</body>
+</html>
