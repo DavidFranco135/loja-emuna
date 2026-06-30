@@ -174,6 +174,7 @@ ul { list-style: none; }
   backdrop-filter: blur(10px);
   border-bottom: 1px solid transparent;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  padding-top: env(safe-area-inset-top);
 }
 .site-header.is-scrolled {
   border-bottom-color: var(--gray-line);
@@ -769,3 +770,38 @@ ul { list-style: none; }
   color: var(--gray-mid);
 }
 .admin-login-error { color: #C0392B; font-size: 13px; margin-top: 10px; min-height: 16px; }
+
+/* ============================================================
+   Responsividade — telas pequenas (iPhone/Android)
+   ============================================================ */
+
+/* Evita zoom automático do Safari iOS ao focar em campos de formulário
+   (qualquer input/select/textarea com font-size < 16px dispara o zoom) */
+@media (max-width: 600px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Header mais compacto em telas estreitas, para logo + ícones nunca quebrarem linha */
+@media (max-width: 420px) {
+  .header-actions { gap: 4px; }
+  .icon-btn { width: 36px; height: 36px; font-size: 15px; }
+  .logo { font-size: 22px; }
+  .site-header .container { gap: 8px; }
+}
+
+/* Área segura do iPhone (notch / home indicator) no menu lateral e overlay */
+.mobile-drawer {
+  padding-top: calc(28px + env(safe-area-inset-top));
+  padding-bottom: calc(28px + env(safe-area-inset-bottom));
+}
+
+/* Impede rolagem horizontal acidental em qualquer página */
+html, body { max-width: 100%; overflow-x: hidden; }
+
+/* Botões/CTAs nunca menores que a área de toque recomendada (44px) */
+@media (max-width: 600px) {
+  .btn { min-height: 44px; }
+  .icon-btn { min-width: 40px; min-height: 40px; }
+}
