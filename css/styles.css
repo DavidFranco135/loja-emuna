@@ -336,8 +336,10 @@ ul { list-style: none; }
 .hero-slide {
   min-width: 100%;
   height: clamp(420px, 70vh, 680px);
-  background-size: cover;
+  background-size: contain;
   background-position: center;
+  background-repeat: no-repeat;
+  background-color: var(--violet-deep);
   position: relative;
   display: flex;
   align-items: center;
@@ -400,6 +402,7 @@ ul { list-style: none; }
 .hero-dot.is-active { background: var(--gold); width: 44px; }
 
 @media (max-width: 640px) {
+  .hero-slide { height: clamp(300px, 56vh, 520px); }
   .hero-slide__content { padding: 0 24px; }
   .hero-dots { left: 24px; }
   .hero-nav { padding: 0 8px; }
