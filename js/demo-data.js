@@ -413,9 +413,9 @@ export const demoOrders = [
 ];
 
 export const demoCoupons = [
-  { code: "EMUNA10", type: "percent", value: 10, label: "10% de desconto" },
-  { code: "BEMVINDA", type: "percent", value: 15, label: "15% de desconto — primeira compra" },
-  { code: "FRETEGRATIS", type: "shipping", value: 0, label: "Frete grátis" },
+  { id: "coupon-1", code: "EMUNA10", type: "percent", value: 10, label: "10% de desconto" },
+  { id: "coupon-2", code: "BEMVINDA", type: "percent", value: 15, label: "15% de desconto — primeira compra" },
+  { id: "coupon-3", code: "FRETEGRATIS", type: "shipping", value: 0, label: "Frete grátis" },
 ];
 
 export const demoCustomerFlags = {};
