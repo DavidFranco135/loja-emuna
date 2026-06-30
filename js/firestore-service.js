@@ -18,7 +18,6 @@ import {
   addDoc,
   doc,
   setDoc,
-  updateDoc,
   deleteDoc,
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
@@ -271,7 +270,7 @@ export async function updateTestimonial(id, data) {
     if (idx >= 0) demoTestimonials[idx] = { ...demoTestimonials[idx], ...data };
     return;
   }
-  await updateDoc(doc(db, "testimonials", id), data);
+  await setDoc(doc(db, "testimonials", id), data, { merge: true });
 }
 
 export async function deleteTestimonial(id) {
@@ -307,7 +306,7 @@ export async function updateCoupon(id, data) {
     if (idx >= 0) demoCoupons[idx] = { ...demoCoupons[idx], ...patch };
     return;
   }
-  await updateDoc(doc(db, "coupons", id), patch);
+  await setDoc(doc(db, "coupons", id), patch, { merge: true });
 }
 
 export async function deleteCoupon(id) {
@@ -364,7 +363,7 @@ export async function updateProduct(id, data) {
     if (idx >= 0) demoProducts[idx] = { ...demoProducts[idx], ...data };
     return;
   }
-  await updateDoc(doc(db, "products", id), data);
+  await setDoc(doc(db, "products", id), data, { merge: true });
 }
 
 export async function deleteProduct(id) {
@@ -404,7 +403,7 @@ export async function updateCategory(id, data) {
     if (idx >= 0) demoCategories[idx] = { ...demoCategories[idx], ...data };
     return;
   }
-  await updateDoc(doc(db, "categories", id), data);
+  await setDoc(doc(db, "categories", id), data, { merge: true });
 }
 
 export async function deleteCategory(id) {
@@ -449,7 +448,7 @@ export async function updateOrderStatus(id, status) {
     if (idx >= 0) demoOrders[idx].status = status;
     return;
   }
-  await updateDoc(doc(db, "orders", id), { status });
+  await setDoc(doc(db, "orders", id), { status }, { merge: true });
 }
 
 export async function updateOrderTracking(id, trackingCode) {
@@ -458,7 +457,7 @@ export async function updateOrderTracking(id, trackingCode) {
     if (idx >= 0) demoOrders[idx].trackingCode = trackingCode;
     return;
   }
-  await updateDoc(doc(db, "orders", id), { trackingCode });
+  await setDoc(doc(db, "orders", id), { trackingCode }, { merge: true });
 }
 
 // ---------- configurações ----------
@@ -513,7 +512,7 @@ export async function updateBanner(id, data) {
     if (idx >= 0) demoBanners[idx] = { ...demoBanners[idx], ...data };
     return;
   }
-  await updateDoc(doc(db, "banners", id), data);
+  await setDoc(doc(db, "banners", id), data, { merge: true });
 }
 
 export async function deleteBanner(id) {
@@ -541,7 +540,7 @@ export async function updatePromoBanner(id, data) {
     if (idx >= 0) demoPromoBanners[idx] = { ...demoPromoBanners[idx], ...data };
     return;
   }
-  await updateDoc(doc(db, "promoBanners", id), data);
+  await setDoc(doc(db, "promoBanners", id), data, { merge: true });
 }
 
 export async function deletePromoBanner(id) {
