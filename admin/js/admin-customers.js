@@ -65,11 +65,13 @@ function openDetail(customer) {
 
   $("#customer-backdrop").classList.add("is-open");
   $("#customer-slideover").classList.add("is-open");
+  $("#customer-slideover").setAttribute("aria-hidden", "false");
 }
 
 function closeDetail() {
   $("#customer-backdrop").classList.remove("is-open");
   $("#customer-slideover").classList.remove("is-open");
+  $("#customer-slideover").setAttribute("aria-hidden", "true");
   activeEmail = null;
 }
 
