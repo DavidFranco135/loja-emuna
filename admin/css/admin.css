@@ -44,6 +44,15 @@ img { max-width: 100%; display: block; }
   min-height: 100vh;
 }
 
+/* CRÍTICO: o #sidebar-placeholder é um <div> comum que recebe o conteúdo
+   do partial via fetch (sidebar + topbar). Sem isto, ele vira uma COLUNA
+   a mais dentro do .admin-shell (que é flex), porque a topbar (.admin-topbar)
+   não é position:fixed e acaba contando como conteúdo normal do placeholder,
+   empurrando o .admin-main para o lado e causando rolagem horizontal no
+   celular. display:contents remove a caixa do placeholder, tratando seus
+   filhos como se fossem filhos diretos do .admin-shell. */
+#sidebar-placeholder { display: contents; }
+
 /* ---------- demo mode banner ---------- */
 .demo-mode-banner {
   background: var(--gold);
@@ -130,15 +139,17 @@ img { max-width: 100%; display: block; }
 
 /* ---------- topbar ---------- */
 .admin-topbar {
-  height: var(--topbar-h);
+  min-height: var(--topbar-h);
   background: var(--white);
   border-bottom: 1px solid var(--gray-line);
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: env(safe-area-inset-top) 28px 0;
-  position: sticky;
+  padding: calc(14px + env(safe-area-inset-top)) 28px 14px;
+  position: fixed;
   top: 0;
+  left: var(--sidebar-w);
+  right: 0;
   z-index: 100;
 }
 .admin-menu-toggle { display: none; font-size: 20px; flex-shrink: 0; }
@@ -166,6 +177,7 @@ img { max-width: 100%; display: block; }
 
 @media (max-width: 880px) {
   .admin-menu-toggle { display: block; }
+  .admin-topbar { left: 0; }
 }
 @media (max-width: 480px) {
   .admin-topbar { padding-left: 16px; padding-right: 16px; gap: 10px; }
@@ -177,7 +189,8 @@ img { max-width: 100%; display: block; }
   margin-left: var(--sidebar-w);
   flex: 1;
   min-width: 0;
-  padding: 28px;
+  max-width: 100%;
+  padding: calc(var(--topbar-h) + env(safe-area-inset-top) + 28px) 28px 28px;
 }
 @media (max-width: 880px) {
   .admin-main { margin-left: 0; }
@@ -227,6 +240,8 @@ img { max-width: 100%; display: block; }
   grid-template-columns: 1fr;
   margin-bottom: 24px;
 }
+.charts-grid > .panel { min-width: 0; }
+.panel canvas { max-width: 100% !important; }
 @media (min-width: 980px) {
   .charts-grid { grid-template-columns: 1.4fr 1fr; }
 }
@@ -461,7 +476,9 @@ html, body { max-width: 100%; overflow-x: hidden; }
   .form-grid--3 {
     grid-template-columns: 1fr;
   }
-  .admin-main { padding: 16px; }
+  .admin-main {
+    padding: calc(var(--topbar-h) + env(safe-area-inset-top) + 16px) 16px 16px;
+  }
   .panel { padding: 18px; }
   .stat-card__value { font-size: 24px; }
   .admin-slideover { padding: 20px; }
