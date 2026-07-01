@@ -30,11 +30,11 @@ function renderTable() {
     .map(
       (c) => `
       <tr data-id="${c.id}">
-        <td><img class="table-thumb" src="${c.image || ""}" alt="" /></td>
-        <td>${c.name}</td>
-        <td>${c.icon || "—"}</td>
-        <td>${c.order ?? "—"}</td>
-        <td>
+        <td class="cell-thumb"><img class="table-thumb" src="${c.image || ""}" alt="" /></td>
+        <td data-label="Nome">${c.name}</td>
+        <td data-label="Ícone">${c.icon || "—"}</td>
+        <td data-label="Ordem">${c.order ?? "—"}</td>
+        <td class="cell-actions">
           <div class="table-actions">
             <button class="btn btn--ghost btn--sm" data-edit="${c.id}">Editar</button>
             <button class="btn btn--danger btn--sm" data-delete="${c.id}">Excluir</button>
