@@ -65,12 +65,12 @@ function renderHeroTable() {
     .map(
       (b) => `
       <tr data-id="${b.id}">
-        <td><img class="table-thumb" src="${b.image || ""}" alt="" /></td>
-        <td>${b.title}</td>
-        <td>${b.subtitle || "—"}</td>
-        <td>${b.order ?? "—"}</td>
-        <td>${b.active !== false ? '<span class="badge badge--green">Ativo</span>' : '<span class="badge badge--gray">Inativo</span>'}</td>
-        <td>
+        <td class="cell-thumb"><img class="table-thumb" src="${b.image || ""}" alt="" /></td>
+        <td data-label="Título">${b.title || "—"}</td>
+        <td data-label="Subtítulo">${b.subtitle || "—"}</td>
+        <td data-label="Ordem">${b.order ?? "—"}</td>
+        <td data-label="Status">${b.active !== false ? '<span class="badge badge--green">Ativo</span>' : '<span class="badge badge--gray">Inativo</span>'}</td>
+        <td class="cell-actions">
           <div class="table-actions">
             <button class="btn btn--ghost btn--sm" data-edit-hero="${b.id}">Editar</button>
             <button class="btn btn--danger btn--sm" data-delete-hero="${b.id}">Excluir</button>
@@ -162,11 +162,11 @@ function renderPromoTable() {
     .map(
       (b) => `
       <tr data-id="${b.id}">
-        <td><img class="table-thumb" src="${b.image || ""}" alt="" /></td>
-        <td>${b.title}</td>
-        <td>${b.link || "—"}</td>
-        <td>${b.order ?? "—"}</td>
-        <td>
+        <td class="cell-thumb"><img class="table-thumb" src="${b.image || ""}" alt="" /></td>
+        <td data-label="Título">${b.title || "—"}</td>
+        <td data-label="Link">${b.link || "—"}</td>
+        <td data-label="Ordem">${b.order ?? "—"}</td>
+        <td class="cell-actions">
           <div class="table-actions">
             <button class="btn btn--ghost btn--sm" data-edit-promo="${b.id}">Editar</button>
             <button class="btn btn--danger btn--sm" data-delete-promo="${b.id}">Excluir</button>
