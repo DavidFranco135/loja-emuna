@@ -599,7 +599,7 @@ ul { list-style: none; }
 .price-old { font-size: 13px; color: var(--gray-mid); text-decoration: line-through; }
 .price-new { font-size: 18px; font-weight: 700; color: var(--violet-deep); }
 .stock-warning { font-size: 12px; color: #B9572E; font-weight: 600; }
-.product-card .btn { margin-top: 8px; padding: 11px 18px; font-size: 14px; }
+.product-card .btn { margin-top: 8px; padding: 11px 18px; font-size: 14px; white-space: nowrap; }
 
 .empty-state { color: var(--gray-mid); font-style: italic; }
 
