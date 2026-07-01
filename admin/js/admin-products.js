@@ -10,9 +10,11 @@ import {
   updateProduct,
   deleteProduct,
   duplicateProduct,
+  reorderProducts,
 } from "../../js/firestore-service.js";
 import { formatBRL } from "../../js/cart.js";
 import { uploadMultipleToImgBB } from "../../js/imgbb-upload.js";
+import { initDragReorder } from "./drag-reorder.js";
 
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 
@@ -56,7 +58,7 @@ function renderTable() {
 
   const body = $("#products-body");
   if (!list.length) {
-    body.innerHTML = `<tr><td colspan="8" class="empty-state">Nenhum produto encontrado.</td></tr>`;
+    body.innerHTML = `<tr><td colspan="9" class="empty-state">Nenhum produto encontrado.</td></tr>`;
     return;
   }
 
@@ -77,7 +79,8 @@ function renderTable() {
           : "";
 
       return `
-        <tr data-id="${p.id}">
+        <tr data-id="${p.id}" draggable="true">
+          <td class="cell-actions" style="width:1%"><span class="drag-handle" title="Arrastar para reordenar">⠿</span></td>
           <td class="cell-thumb"><img class="table-thumb" src="${p.images?.[0] || ""}" alt="" /></td>
           <td data-label="Produto">${p.name}</td>
           <td data-label="SKU">${p.sku || "—"}</td>
@@ -217,7 +220,7 @@ async function handleSubmit(e) {
     await updateProduct(id, data);
     showToast("Produto atualizado.");
   } else {
-    await createProduct(data);
+    await createProduct({ ...data, order: products.length + 1 });
     showToast("Produto cadastrado.");
   }
 
@@ -273,6 +276,19 @@ async function init() {
   $("#product-stock-filter").addEventListener("change", renderTable);
 
   $("#products-body").addEventListener("click", handleTableClick);
+
+  initDragReorder($("#products-body"), async (orderedIds) => {
+    const f = currentFilters();
+    if (f.q || f.category || f.stock) {
+      showToast("Limpe os filtros antes de reordenar.");
+      renderTable();
+      return;
+    }
+    await reorderProducts(orderedIds);
+    showToast("Ordem dos produtos atualizada.");
+    await loadData();
+    renderTable();
+  });
 }
 
 init();
