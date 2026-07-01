@@ -8,6 +8,7 @@ import {
   createTestimonial,
   updateTestimonial,
   deleteTestimonial,
+  approveTestimonial,
 } from "../../js/firestore-service.js";
 import { uploadImageToImgBB } from "../../js/imgbb-upload.js";
 
@@ -23,10 +24,12 @@ async function loadData() {
 function renderTable() {
   const body = $("#testimonials-body");
   if (!testimonials.length) {
-    body.innerHTML = `<tr><td colspan="5" class="empty-state">Nenhum depoimento cadastrado.</td></tr>`;
+    body.innerHTML = `<tr><td colspan="6" class="empty-state">Nenhum depoimento cadastrado.</td></tr>`;
     return;
   }
-  body.innerHTML = testimonials
+  // depoimentos pendentes de aprovação (enviados por clientes) primeiro
+  const sorted = [...testimonials].sort((a, b) => (a.approved === false ? -1 : 1) - (b.approved === false ? -1 : 1));
+  body.innerHTML = sorted
     .map(
       (t) => `
       <tr data-id="${t.id}">
@@ -34,8 +37,10 @@ function renderTable() {
         <td>${t.name}</td>
         <td>${t.text.length > 70 ? t.text.slice(0, 70) + "…" : t.text}</td>
         <td>${"★".repeat(t.rating || 5)}</td>
+        <td>${t.approved === false ? '<span class="badge badge--orange">Pendente</span>' : '<span class="badge badge--green">Publicado</span>'}</td>
         <td>
           <div class="table-actions">
+            ${t.approved === false ? `<button class="btn btn--primary btn--sm" data-approve="${t.id}">Aprovar</button>` : ""}
             <button class="btn btn--ghost btn--sm" data-edit="${t.id}">Editar</button>
             <button class="btn btn--danger btn--sm" data-delete="${t.id}">Excluir</button>
           </div>
@@ -103,6 +108,7 @@ async function handleSubmit(e) {
     text: $("#tf-text").value.trim(),
     rating: Math.min(5, Math.max(1, parseInt($("#tf-rating").value, 10) || 5)),
     photo: currentPhoto,
+    approved: true,
   };
 
   if (id) {
@@ -121,9 +127,15 @@ async function handleSubmit(e) {
 async function handleTableClick(e) {
   const editId = e.target.closest("[data-edit]")?.dataset.edit;
   const delId = e.target.closest("[data-delete]")?.dataset.delete;
+  const approveId = e.target.closest("[data-approve]")?.dataset.approve;
 
   if (editId) {
     openSlideover(testimonials.find((t) => t.id === editId));
+  } else if (approveId) {
+    await approveTestimonial(approveId);
+    showToast("Depoimento publicado na Home.");
+    await loadData();
+    renderTable();
   } else if (delId) {
     if (!confirm("Excluir este depoimento?")) return;
     await deleteTestimonial(delId);
