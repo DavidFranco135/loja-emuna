@@ -33,12 +33,12 @@ function renderTable() {
     .map(
       (t) => `
       <tr data-id="${t.id}">
-        <td><img class="table-thumb" src="${t.photo || ""}" alt="" /></td>
-        <td>${t.name}</td>
-        <td>${t.text.length > 70 ? t.text.slice(0, 70) + "…" : t.text}</td>
-        <td>${"★".repeat(t.rating || 5)}</td>
-        <td>${t.approved === false ? '<span class="badge badge--orange">Pendente</span>' : '<span class="badge badge--green">Publicado</span>'}</td>
-        <td>
+        <td class="cell-thumb"><img class="table-thumb" src="${t.photo || ""}" alt="" /></td>
+        <td data-label="Cliente">${t.name}</td>
+        <td data-label="Depoimento">${t.text.length > 70 ? t.text.slice(0, 70) + "…" : t.text}</td>
+        <td data-label="Nota">${"★".repeat(t.rating || 5)}</td>
+        <td data-label="Status">${t.approved === false ? '<span class="badge badge--orange">Pendente</span>' : '<span class="badge badge--green">Publicado</span>'}</td>
+        <td class="cell-actions">
           <div class="table-actions">
             ${t.approved === false ? `<button class="btn btn--primary btn--sm" data-approve="${t.id}">Aprovar</button>` : ""}
             <button class="btn btn--ghost btn--sm" data-edit="${t.id}">Editar</button>
