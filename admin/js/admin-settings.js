@@ -44,6 +44,7 @@ function fillForm(s) {
   $("#st-email").value = s.email || "";
   $("#st-phone").value = s.phone || "";
   $("#st-whatsapp").value = s.whatsapp || "";
+  $("#st-pix-key").value = s.pixKey || "";
   $("#st-address").value = s.address || "";
   $("#st-logo").value = s.logo || "";
   $("#st-favicon").value = s.favicon || "";
@@ -69,6 +70,7 @@ function readForm() {
     email: $("#st-email").value.trim(),
     phone: $("#st-phone").value.trim(),
     whatsapp: $("#st-whatsapp").value.trim(),
+    pixKey: $("#st-pix-key").value.trim(),
     address: $("#st-address").value.trim(),
     logo: $("#st-logo").value.trim(),
     favicon: $("#st-favicon").value.trim(),
