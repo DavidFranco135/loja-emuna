@@ -93,6 +93,21 @@ input[type="checkbox"] {
   background: var(--white);
 }
 
+/* Catálogo da Loja: sempre em grade (nunca carrossel), independente de
+   qualquer outra regra — 2 colunas no celular, 3 a partir do tablet. */
+#shop-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  overflow-x: visible !important;
+}
+@media (min-width: 640px) {
+  #shop-grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+#shop-grid .product-card {
+  width: auto !important;
+  flex: none !important;
+}
+
 /* botão "Filtros" que abre o painel — só existe visualmente no mobile */
 .shop-filters__toggle { display: none; }
 
