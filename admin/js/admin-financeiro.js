@@ -119,11 +119,11 @@ function renderTransactionsTable(periodTransactions) {
     .map(
       (t) => `
       <tr data-id="${t.id}">
-        <td>${new Date(t.date).toLocaleDateString("pt-BR")}</td>
-        <td>${t.description}</td>
-        <td>${t.category || "—"}</td>
-        <td>${formatBRL(t.amount)}</td>
-        <td><button class="btn btn--danger btn--sm" data-delete="${t.id}">Excluir</button></td>
+        <td data-label="Data">${new Date(t.date).toLocaleDateString("pt-BR")}</td>
+        <td data-label="Descrição">${t.description}</td>
+        <td data-label="Categoria">${t.category || "—"}</td>
+        <td data-label="Valor">${formatBRL(t.amount)}</td>
+        <td class="cell-actions"><button class="btn btn--danger btn--sm" data-delete="${t.id}">Excluir</button></td>
       </tr>
     `
     )
