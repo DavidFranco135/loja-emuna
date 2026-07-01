@@ -1,69 +1,152 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Categorias — Painel Emuná</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/admin.css" />
-</head>
-<body>
-<div class="admin-shell">
-  <div id="sidebar-placeholder"></div>
+// ============================================================
+// EMUNÁ ADMIN · Categorias
+// ============================================================
+import { initAdminLayout } from "./admin-layout.js";
+import { showToast } from "./admin-toast.js";
+import {
+  getAllCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} from "../../js/firestore-service.js";
+import { uploadImageToImgBB } from "../../js/imgbb-upload.js";
 
-  <main class="admin-main">
-    <div class="panel">
-      <div class="panel__header">
-        <h2>Categorias</h2>
-        <button class="btn btn--primary" id="new-category-btn">+ Nova categoria</button>
-      </div>
+const $ = (sel, ctx = document) => ctx.querySelector(sel);
 
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th></th><th>Nome</th><th>Ícone</th><th>Ordem</th><th></th></tr></thead>
-          <tbody id="categories-body"></tbody>
-        </table>
-      </div>
-    </div>
-  </main>
-</div>
+let categories = [];
 
-<div class="admin-modal-backdrop" id="category-backdrop"></div>
-<div class="admin-slideover" id="category-slideover" aria-hidden="true" style="width:min(420px,94vw)">
-  <div class="admin-slideover__header">
-    <h2 id="category-form-title">Nova categoria</h2>
-    <button class="admin-slideover__close" id="category-form-close" aria-label="Fechar">×</button>
-  </div>
-  <form id="category-form">
-    <input type="hidden" id="cf-id" />
-    <div class="form-grid">
-      <label class="field field--wide">Nome
-        <input type="text" id="cf-name" required />
-      </label>
-      <label class="field">Ícone (emoji)
-        <input type="text" id="cf-icon" maxlength="4" placeholder="🧶" />
-      </label>
-      <label class="field">Ordem de exibição
-        <input type="number" id="cf-order" min="1" required />
-      </label>
-      <div class="field field--wide">
-        <span>Imagem da categoria</span>
-        <div class="image-thumb-list" id="cf-image-thumb"></div>
-        <label class="btn btn--ghost btn--sm upload-label">
-          📷 Enviar imagem
-          <input type="file" id="cf-image-upload" accept="image/*" hidden />
-        </label>
-        <p class="upload-status" id="cf-upload-status"></p>
-      </div>
-    </div>
-    <div class="admin-slideover__footer">
-      <button type="submit" class="btn btn--primary">Salvar categoria</button>
-      <button type="button" class="btn btn--ghost" id="category-form-cancel">Cancelar</button>
-    </div>
-  </form>
-</div>
+async function loadData() {
+  categories = await getAllCategories();
+  categories.sort((a, b) => (a.order || 0) - (b.order || 0));
+}
 
-<script type="module" src="js/admin-categories.js"></script>
-</body>
-</html>
+function renderTable() {
+  const body = $("#categories-body");
+  if (!categories.length) {
+    body.innerHTML = `<tr><td colspan="5" class="empty-state">Nenhuma categoria cadastrada.</td></tr>`;
+    return;
+  }
+  body.innerHTML = categories
+    .map(
+      (c) => `
+      <tr data-id="${c.id}">
+        <td class="cell-thumb"><img class="table-thumb" src="${c.image || ""}" alt="" /></td>
+        <td data-label="Nome">${c.name}</td>
+        <td data-label="Ícone">${c.icon || "—"}</td>
+        <td data-label="Ordem">${c.order ?? "—"}</td>
+        <td class="cell-actions">
+          <div class="table-actions">
+            <button class="btn btn--ghost btn--sm" data-edit="${c.id}">Editar</button>
+            <button class="btn btn--danger btn--sm" data-delete="${c.id}">Excluir</button>
+          </div>
+        </td>
+      </tr>
+    `
+    )
+    .join("");
+}
+
+let currentImage = "";
+
+function renderImageThumb() {
+  const wrap = $("#cf-image-thumb");
+  wrap.innerHTML = currentImage
+    ? `<div class="image-thumb"><img src="${currentImage}" alt="" /><button type="button" aria-label="Remover">×</button></div>`
+    : "";
+  wrap.querySelector("button")?.addEventListener("click", () => {
+    currentImage = "";
+    renderImageThumb();
+  });
+}
+
+async function handleImageUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const statusEl = $("#cf-upload-status");
+  statusEl.className = "upload-status";
+  statusEl.textContent = "Enviando imagem…";
+  try {
+    currentImage = await uploadImageToImgBB(file);
+    renderImageThumb();
+    statusEl.textContent = "Imagem enviada com sucesso.";
+    setTimeout(() => (statusEl.textContent = ""), 2500);
+  } catch (err) {
+    statusEl.className = "upload-status is-error";
+    statusEl.textContent = err.message;
+  }
+  e.target.value = "";
+}
+
+function openSlideover(category = null) {
+  $("#category-form-title").textContent = category ? "Editar categoria" : "Nova categoria";
+  $("#cf-id").value = category?.id || "";
+  $("#cf-name").value = category?.name || "";
+  $("#cf-icon").value = category?.icon || "";
+  $("#cf-order").value = category?.order ?? categories.length + 1;
+  currentImage = category?.image || "";
+  renderImageThumb();
+  $("#cf-upload-status").textContent = "";
+  $("#category-backdrop").classList.add("is-open");
+  $("#category-slideover").classList.add("is-open");
+  $("#category-slideover").setAttribute("aria-hidden", "false");
+}
+
+function closeSlideover() {
+  $("#category-backdrop").classList.remove("is-open");
+  $("#category-slideover").classList.remove("is-open");
+  $("#category-slideover").setAttribute("aria-hidden", "true");
+}
+
+async function handleSubmit(e) {
+  e.preventDefault();
+  const id = $("#cf-id").value;
+  const data = {
+    name: $("#cf-name").value.trim(),
+    icon: $("#cf-icon").value.trim(),
+    order: parseInt($("#cf-order").value, 10) || 1,
+    image: currentImage,
+  };
+
+  if (id) {
+    await updateCategory(id, data);
+    showToast("Categoria atualizada.");
+  } else {
+    await createCategory(data);
+    showToast("Categoria criada.");
+  }
+
+  closeSlideover();
+  await loadData();
+  renderTable();
+}
+
+async function handleTableClick(e) {
+  const editId = e.target.closest("[data-edit]")?.dataset.edit;
+  const delId = e.target.closest("[data-delete]")?.dataset.delete;
+
+  if (editId) {
+    openSlideover(categories.find((c) => c.id === editId));
+  } else if (delId) {
+    if (!confirm("Excluir esta categoria? Produtos associados não serão excluídos.")) return;
+    await deleteCategory(delId);
+    showToast("Categoria excluída.");
+    await loadData();
+    renderTable();
+  }
+}
+
+async function init() {
+  await initAdminLayout("categorias", "Categorias");
+  await loadData();
+  renderTable();
+
+  $("#new-category-btn").addEventListener("click", () => openSlideover());
+  $("#category-form-close").addEventListener("click", closeSlideover);
+  $("#category-form-cancel").addEventListener("click", closeSlideover);
+  $("#category-backdrop").addEventListener("click", closeSlideover);
+  $("#category-form").addEventListener("submit", handleSubmit);
+  $("#cf-image-upload").addEventListener("change", handleImageUpload);
+  $("#categories-body").addEventListener("click", handleTableClick);
+}
+
+init();
