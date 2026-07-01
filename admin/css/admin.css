@@ -289,6 +289,23 @@ tbody tr:hover { background: var(--cream); }
 .table-thumb { width: 42px; height: 42px; border-radius: var(--radius-sm); object-fit: cover; }
 .table-actions { display: flex; gap: 6px; flex-wrap: wrap; }
 
+/* arrastar para reordenar */
+.drag-handle {
+  cursor: grab;
+  color: var(--gray-mid);
+  font-size: 16px;
+  padding: 4px 8px;
+  user-select: none;
+  touch-action: none;
+}
+tr[draggable="true"] { cursor: default; }
+tr.is-dragging-row { opacity: 0.4; background: var(--lilac); }
+.reorder-hint {
+  font-size: 12px;
+  color: var(--gray-mid);
+  margin-bottom: 14px;
+}
+
 /* Em telas pequenas, cada linha vira um cartão empilhado — muito mais
    fácil de usar do que rolar uma tabela pro lado no celular. */
 @media (max-width: 760px) {
