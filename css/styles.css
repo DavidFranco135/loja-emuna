@@ -418,17 +418,29 @@ ul { list-style: none; }
   .hero-nav .icon-btn { width: 36px; height: 36px; font-size: 16px; }
 }
 
-/* promo strip */
+/* promo strip — mini carrossel, mostra um banner por vez (igual o
+   principal, só que mais baixo), com deslize por toque e pontinhos */
 .promo-strip { padding: 48px 0 0; }
-.promo-track {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
+.promo-viewport {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
 }
+.promo-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.promo-track::-webkit-scrollbar { display: none; }
+
 .promo-card {
   position: relative;
-  height: 160px;
-  border-radius: var(--radius-md);
+  min-width: 100%;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  height: 260px;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -436,39 +448,39 @@ ul { list-style: none; }
   display: flex;
   align-items: flex-end;
   overflow: hidden;
-  box-shadow: var(--shadow-card);
-  transition: transform 0.3s ease;
 }
-.promo-card:hover { transform: translateY(-4px); }
 .promo-card::before {
   content: "";
   position: absolute; inset: 0;
-  background: linear-gradient(0deg, rgba(42,17,77,0.75), transparent 60%);
+  background: linear-gradient(0deg, rgba(42,17,77,0.7), transparent 55%);
 }
 .promo-card__label {
   position: relative;
   z-index: 1;
   color: var(--white);
   font-weight: 600;
-  font-size: 17px;
-  padding: 18px 22px;
+  font-size: 18px;
+  padding: 20px 24px;
 }
 
-/* No celular: 2 colunas menores lado a lado, em vez de 1 coluna alta.
-   !important garante que isso nunca vire uma imagem de tela cheia,
-   independente de qualquer outra regra. */
+.promo-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.promo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--gray-line);
+  transition: background 0.25s ease, width 0.25s ease;
+}
+.promo-dot.is-active { background: var(--gold); width: 26px; }
+
 @media (max-width: 640px) {
-  .promo-track {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
-  }
-  .promo-card {
-    height: 130px !important;
-  }
-  .promo-card__label {
-    font-size: 14px !important;
-    padding: 12px 14px !important;
-  }
+  .promo-card { height: 190px; }
+  .promo-card__label { font-size: 15px; padding: 16px 18px; }
 }
 
 /* ============================================================
