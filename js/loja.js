@@ -109,6 +109,20 @@ function bindFilterEvents() {
     $("#filter-promo").checked = false;
     applyFilters();
   });
+
+  // painel deslizante de filtros (mobile)
+  const openFilters = () => {
+    $("#shop-filters").classList.add("is-open");
+    $("#filters-backdrop").classList.add("is-open");
+  };
+  const closeFilters = () => {
+    $("#shop-filters").classList.remove("is-open");
+    $("#filters-backdrop").classList.remove("is-open");
+  };
+  $("#open-filters-btn").addEventListener("click", openFilters);
+  $("#close-filters-btn").addEventListener("click", closeFilters);
+  $("#filters-backdrop").addEventListener("click", closeFilters);
+  $("#apply-filters-btn").addEventListener("click", closeFilters);
 }
 
 function debounce(fn, wait) {
