@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Finalizar compra — Emuná</title>
 <link rel="manifest" href="manifest.json" />
 <meta name="theme-color" content="#6F3CC3" />
@@ -108,9 +108,26 @@
 
       <div class="checkout-success" id="checkout-success" hidden>
         <span class="checkout-success__icon">✦</span>
-        <h2>Pedido confirmado!</h2>
-        <p>Recebemos seu pedido <strong id="success-order-id"></strong> e em breve você receberá a confirmação por e-mail.</p>
-        <a class="btn btn--primary" href="index.html">Voltar para a loja</a>
+        <h2>Pedido recebido!</h2>
+        <p>Seu pedido <strong id="success-order-id"></strong> foi registrado. Falta só um passo pra confirmar o pagamento:</p>
+
+        <div class="payment-instructions" id="payment-instructions-pix" hidden>
+          <p class="payment-instructions__label">Chave Pix para pagamento</p>
+          <div class="pix-key-box">
+            <code id="pix-key-value"></code>
+            <button type="button" class="btn btn--ghost btn--sm" id="copy-pix-btn">Copiar</button>
+          </div>
+          <p class="payment-instructions__hint">Depois de pagar, envie o comprovante pelo WhatsApp pra gente confirmar seu pedido mais rápido.</p>
+        </div>
+
+        <div class="payment-instructions" id="payment-instructions-other" hidden>
+          <p class="payment-instructions__hint">Vamos te chamar no WhatsApp pra combinar o pagamento (<span id="payment-method-label"></span>) e confirmar seu pedido.</p>
+        </div>
+
+        <div class="checkout-success__actions">
+          <a class="btn btn--gold" id="whatsapp-confirm-btn" href="#" target="_blank" rel="noopener">💬 Confirmar pelo WhatsApp</a>
+          <a class="btn btn--ghost" href="index.html">Voltar para a loja</a>
+        </div>
       </div>
 
     </div>
