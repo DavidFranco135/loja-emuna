@@ -11,6 +11,7 @@ import { addItem, formatBRL } from "./cart.js";
 import { isFavorite, toggleFavorite } from "./favorites.js";
 import { initLayout } from "./layout.js";
 import { renderProductGrid } from "./product-card.js";
+import { toWhatsAppNumber } from "./phone-utils.js";
 
 const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
@@ -203,7 +204,7 @@ function initActions(product, settings) {
     window.location.href = "cart.html";
   });
 
-  $("#whatsapp-btn").href = `https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(
+  $("#whatsapp-btn").href = `https://wa.me/${toWhatsAppNumber(settings.whatsapp)}?text=${encodeURIComponent(
     `Olá! Tenho interesse no produto "${product.name}" (${window.location.href})`
   )}`;
 
